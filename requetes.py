@@ -1,24 +1,37 @@
 import networkx as nx
-import json 
-import matplotlib as plt
+import json
+import matplotlib.pyplot as plt
+
 
 def json_vers_nx(chemin):
     graphe = nx.Graph()
     try : 
         fic = open(chemin)
-        dico = dict()
         print('ok')
         lignes = fic.read().split("\n")
         print('ok')
-        for ligne in lignes:
-            ligneDico = json.loads(ligne)
-            if ("[[Kevin Bacon]]" in ligneDico["cast"]):
-                for acteur in ligneDico["cast"]:
-                    graphe.add_node(acteur)
+        acteurPrec = "[[Kevin Bacon]]"
+        graphe.add_node('[[Kevin Bacon]]')
+        grapheListe = ["[[Kevin Bacon]]"]
+        for i in range(0, len(lignes)-1):
+            ligneDico = json.loads(lignes[i])
+            for acteur in ligneDico["cast"]:
+                grapheListe.append(acteur)
+        j = 0
+        while j<len(grapheListe):
+            acteurPrec = grapheListe[j]
+            for i in range(0, len(lignes)-1):
+                ligneDico = json.loads(lignes[i])
+                if (acteurPrec in ligneDico["cast"]):
+                        for acteur in ligneDico["cast"]:
+                            graphe.add_edge(acteur, acteurPrec)
+                
         print("lignes")
+        #graphe.remove_edge('[[Kevin Bacon]]', '[[Kevin Bacon]]')
         plt.clf()
         nx.draw(graphe)
+        plt.show()
     except FileNotFoundError:
         return 0
 
-print(json_vers_nx("/home/iut45/Etudiants/o22301776/SAE_2.02_graphes/data.txt"))
+print(json_vers_nx("data.txt"))
