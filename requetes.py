@@ -1,8 +1,3 @@
-import networkx as nx
-import json
-import matplotlib.pyplot as plt
-
-
 def json_vers_nx(chemin):
     graphe = nx.Graph()
     try : 
@@ -10,28 +5,28 @@ def json_vers_nx(chemin):
         print('ok')
         lignes = fic.read().split("\n")
         print('ok')
-        acteurPrec = "[[Kevin Bacon]]"
-        graphe.add_node('[[Kevin Bacon]]')
-        grapheListe = ["[[Kevin Bacon]]"]
-        for i in range(0, len(lignes)-1):
-            ligneDico = json.loads(lignes[i])
-            for acteur in ligneDico["cast"]:
-                grapheListe.append(acteur)
+        graphe.add_node("Kevin Bacon")
         j = 0
-        while j<len(grapheListe):
-            acteurPrec = grapheListe[j]
-            for i in range(0, len(lignes)-1):
+        while j<len(list(graphe.nodes)) and j<500:
+            acteurPrec = list(graphe.nodes)[j]
+            acteurPrecL = "[["+acteurPrec+"]]"
+            acteurPrec = acteurPrec.replace('[[', '')
+            acteurPrec = acteurPrec.replace(']]', '')
+            for i in range(len(lignes)):
                 ligneDico = json.loads(lignes[i])
-                if (acteurPrec in ligneDico["cast"]):
+                if (acteurPrec in ligneDico["cast"]) or (acteurPrecL in ligneDico["cast"]):
                         for acteur in ligneDico["cast"]:
-                            graphe.add_edge(acteur, acteurPrec)
-                
-        print("lignes")
-        #graphe.remove_edge('[[Kevin Bacon]]', '[[Kevin Bacon]]')
+                            acteur = acteur.replace('[[', '')
+                            acteur = acteur.replace(']]', '')
+                            if (acteur != acteurPrec):
+                                graphe.add_edge(acteur, acteurPrec)
+            j+=1
+        options = {'with_labels': True,'node_size': 1000,'node_color': "skyblue",'node_shape': "s", 'alpha': 0.5, 
+        'linewidths': 10}
         plt.clf()
-        nx.draw(graphe)
+        nx.draw(graphe, pos = nx.random_layout(graphe), **options)
         plt.show()
     except FileNotFoundError:
-        return 0
+        print("impossible d'ouvrir le fichier")
 
 print(json_vers_nx("data.txt"))
