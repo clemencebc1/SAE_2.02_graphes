@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import random
 
 #Q1 6.1 
+<<<<<<< HEAD
+G = nx.Graph()
+=======
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
 def json_vers_nx(chemin):
     """ convertit un fichier json en un graph networkx
 
@@ -13,16 +17,26 @@ def json_vers_nx(chemin):
     Returns:
         Graph: retourne un graphe avec l'ensemble des acteurs ayant collaboré avec Kevin Bacon ou les acteurs proches
     """
+<<<<<<< HEAD
+=======
     graphe = nx.Graph()
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
     try : 
         fic = open(chemin)
         print('ok')
         lignes = fic.read().split("\n") # on découpe chacune des lignes et on les place dans une liste
         print('ok')
+<<<<<<< HEAD
+        G.add_node("Kevin Bacon") # ajout du noeud principal
+        j = 0 # un compteur pour s'assurer que la boucle while s'arrête
+        while j<len(list(G.nodes)) and j<1000:
+            acteurPrec = list(G.nodes)[j]
+=======
         graphe.add_node("Kevin Bacon") # ajout du noeud principal
         j = 0 # un compteur pour s'assurer que la boucle while s'arrête
         while j<len(list(graphe.nodes)) and j<1000:
             acteurPrec = list(graphe.nodes)[j]
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
             acteurPrecL = "[["+acteurPrec+"]]"
             acteurPrec = acteurPrec.replace('[[', '') # on efface la double liste dans la chaine de caracteres
             acteurPrec = acteurPrec.replace(']]', '')
@@ -33,7 +47,11 @@ def json_vers_nx(chemin):
                             acteur = acteur.replace('[[', '')
                             acteur = acteur.replace(']]', '')
                             if (acteur != acteurPrec): # si ce n'est pas lui même (pas de boucle)
+<<<<<<< HEAD
+                                G.add_edge(acteur, acteurPrec)
+=======
                                 graphe.add_edge(acteur, acteurPrec)
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
                             
             j+=1
         options = {
@@ -43,6 +61,31 @@ def json_vers_nx(chemin):
         'node_shape': "s", 
         'alpha': 0.5, 
         'linewidths': 10
+<<<<<<< HEAD
+        } 
+    
+        pos = {}
+        longueur = len(list(G.nodes))/2
+        print(longueur)
+        x = 0
+        y = 0
+        for noeud in list(G.nodes):
+            pos[noeud]=[x,y]
+            if y>longueur:
+                y = 0
+                x += 15
+            y += 15
+            
+        # des options pour rendre le graphe plus lisible
+        plt.clf() # on efface les figures précédentes 
+        nx.draw(G, pos, **options)
+        plt.show()
+        print(type(G))
+    except FileNotFoundError: # si le fichier n'a pas pu s'ouvrir
+        print("impossible d'ouvrir le fichier")
+
+json_vers_nx("data_100.txt")
+=======
         } # des options pour rendre le graphe plus lisible
         plt.clf() # on efface les figures précédentes 
         nx.draw(graphe, pos = nx.random_layout(graphe), **options)
@@ -53,6 +96,7 @@ def json_vers_nx(chemin):
 
 G = json_vers_nx("data2.txt")
 
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
 
 # Q2 6.2
 def collaborateurs_communs(G,u,v):
@@ -67,6 +111,11 @@ def collaborateurs_communs(G,u,v):
         list: une liste de l'ensemble des noeuds (acteurs) adjacents à la fois à u et v
     """
     collab2Acteurs = []
+<<<<<<< HEAD
+    if u not in list(G.nodes):
+        return "inconnu"
+=======
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
     for arete1 in G.adj[u]:
         for arete2 in G.adj[v]:
             if (arete1 == arete2):
@@ -74,6 +123,35 @@ def collaborateurs_communs(G,u,v):
     return collab2Acteurs
         
     
+<<<<<<< HEAD
+print(collaborateurs_communs(G,'Kevin Bacon', 'Jason Patric'))
+
+#Q3 6.3
+def collaborateurs_proches(G,u,k):
+    """Fonction renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
+    
+    Parametres:
+        G: le graphe
+        u: le sommet de départ
+        k: la distance depuis u
+    """
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(u)
+    for i in range(k):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    return collaborateurs
+
+print(collaborateurs_proches(G, 'Jason Patric', 2))
+
+=======
 print(collaborateurs_communs('Kevin Bacon', 'Dev Anand', G))
 
 #Q3 6.3
@@ -108,6 +186,7 @@ def collaborateurs_proches(G,u,k):
 
 print(collaborateurs_proches(G, 'Dev Anand', 2))
 print(G.adj['Dev Anand'])
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
 
 
 def est_proche(G,u,v,k=1):
@@ -132,9 +211,15 @@ def est_proche(G,u,v,k=1):
         distance += 1
     return False
 
+<<<<<<< HEAD
+print(est_proche(G, 'Jason Patric', 'Lara Parker',  1))
+#print(est_proche(G, 'Jason Patric', 'Neeru Bajwa',  4))
+#print(est_proche(G, 'Jason Patric', 'Alok Nath', 1))
+=======
 print(est_proche(G, 'Dev Anand', 'Neeru Bajwa',  1))
 print(est_proche(G, 'Dev Anand', 'Neeru Bajwa',  4))
 print(est_proche(G, 'Dev Anand', 'Alok Nath', 1))
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
 
 def distance_naive(G,u,v):
     """ determine la distance entre deux acteurs
@@ -154,12 +239,33 @@ def distance_naive(G,u,v):
         sont_proches = est_proche(G,u,v,distance)
     return distance
 
+<<<<<<< HEAD
+print(distance_naive(G, 'Jason Patric', 'Lara Parker'))
+#print(distance_naive(G, 'Jason Patric', 'Alok Nath'))
+
+
+def distance(G,u,v):
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(u)
+    for i in range(k):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    return collaborateurs
+=======
 print(distance_naive(G, 'Dev Anand', 'Neeru Bajwa'))
 print(distance_naive(G, 'Dev Anand', 'Alok Nath'))
 
 
 def distance(G,u,v):
     return None
+>>>>>>> c030339d0adab3a4a7d1133bd17756665771f652
 
 # Q4 6.4
 def centralite(G,u):
