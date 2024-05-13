@@ -169,26 +169,30 @@ print(distance_naive(G, 'Jason Patric', 'Lara Parker'))
 
 
 def distance(G,u,v):
-    """
-    
+    """Fonction renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
+   
     Parametres:
         G: le graphe
-        u: le sommet de départ
-        v: un autre acteur
+        u: un acteur
+        v: un second acteur
     """
     if u not in G.nodes:
         print(u,"est un illustre inconnu")
         return None
     collaborateurs = set()
     collaborateurs.add(u)
-    for i in range(k):
+    print(u)
+    print(v)
+    for i in range(1,len(G.nodes)):
         collaborateurs_directs = set()
         for c in collaborateurs:
             for voisin in G.adj[c]:
                 if voisin not in collaborateurs:
                     collaborateurs_directs.add(voisin)
         collaborateurs = collaborateurs.union(collaborateurs_directs)
-    return collaborateurs
+        if v in collaborateurs_directs :
+            return i
+    return None
 
 # Q4 6.4
 def centralite(G,u):

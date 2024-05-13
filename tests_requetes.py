@@ -1,0 +1,38 @@
+import requetes
+
+G = json_vers_nx("data_100.py")
+def test_collaroteurs_communs():
+    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Jack Lemmon")==[]
+    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Holmes")=="inconnu"
+    assert requetes.collaborateurs_communs(G, "Al Pacino", "Larry Gates")==['James Broderick']
+
+def test_collaborateurs_proches():
+    assert requetes.collaborateurs_proches(G, "Jason Patric", 2)=={'Julia Stiles', 'Kansas Bowling', 'Viggo Mortensen', 'Stephen Tobolowsky', 'Jay Mohr', 'Michael Gambon', 'Dianne Wiest', 'James Remar', 'Philip Baker Hall', 'Barton Heyman', 'Ed Harris', 'Chris Messina', 'James Broderick', 'Sterling K. Brown', 'Philip Charles MacKenzie', 'Vanessa Ferlito', 'Tracy Morgan', 'Charles Durning', 'Michael Eklund', 'Ted Beniades', 'Victoria Pedretti', 'Lorenza Izzo', 'Robert De Niro', 'Arnaldo Santana', 'Marlon Brando', 'Nina Arianda', 'Dick Anthony Williams', 'Anton Rodgers', 'Emile Hirsch', 'Robert Redford', 'Robert Duvall', 'Benjamin McKenzie', 'Ángel Salazar', 'Russell Crowe', 'Riley Keough', 'Deborah Kara Unger', 'Margot Robbie', 'James Caan', 'Adrian Pasdar', 'Rebecca Gayheart', 'Lance Henriksen', 'John Cazale', 'Channing Tatum', 'Charles Grodin', 'Tom Kemp', 'Luke Perry', '50 Cent|Curtis Jackson', 'Jaime Sánchez (actor)|Jaime Sánchez', "Ed O'Neill|Edward O'Neil", 'Paul Shenar', 'Colm Feore', 'Mark Margolis', 'Leland Starnes', 'Marion Dougherty', 'Bruce Dern', 'Mikey Madison', 'Joe Spinell', 'Henry Judd Baker', 'Don Scardino', 'Gregory Alan Williams', 'Gary Sandy', 'Chris Marquette', 'Carrie Genzel', 'Sydney Sweeney', 'Albert Henderson (actor)|Albert Henderson', 'Dominic Chianese', 'Zoë Bell', 'Zuleikha Robinson', 'Paul Sorvino', 'Debi Mazar', 'Rebecca Romijn', 'James Tolkan', 'Kristina Copeland', 'Luis Guzmán', 'Tony Roberts (actor)|Tony Roberts', 'Mary Louise Wilson', 'Jack Kehoe', 'Judd Hirsch', 'Ricky Jay', 'Elias Koteas', 'Ben McKenzie|Benjamin McKenzie', 'Damon Herriman', 'Sarah Jessica Parker', 'Penelope Allen', 'Michael Higgins (actor)|Michael Higgins', 'Clark Gregg', 'Míriam Colón', 'Michael Alldredge', 'Rebecca Rittenhouse', 'Tammy Hui', 'Annie Parisse', 'Katheryn Winnick', 'Diane Venora', 'Kyra Sedgwick', 'Harris Yulin', 'M. Emmet Walsh', 'Laura Silverman', 'James Landry Hébert', 'Diane Keaton', 'Rebecca Pidgeon', 'Alan Arkin', 'John Krasinski', 'Roger Bart', 'Julianna Margulies', 'Brad Pitt', 'Lynn Collins', 'Chris Sarandon', 'Allan Corduner', 'Leah Cairns', 'John Finn', 'Sonny Grosso', 'Kristen Bush', 'Kurt Russell', 'David Paymer', 'Estelle Omens', 'Kelly Anna Cox', 'Leonardo DiCaprio', 'Hallie Kate Eisenberg', 'David Harewood', 'Anthony Hopkins', 'Rachel Redleaf', 'Cliff Curtis', 'Keith Prentice', 'Diane Lane', 'Sean Cullen', 'Bette Midler', 'Michal Yannai', 'Michael Aronin', 'Sara Fletcher', 'Melissa Leo', 'Patti LuPone', 'Alan Blumenfeld', 'Dreama Walker', 'Jeremy Irons', 'Richard Dreyfuss', 'Gene Davis (actor)|Gene Davis', 'Bruce Altman', 'Lindsay Crouse', 'Mike Starr (actor)|Mike Starr', 'Samantha Robinson (American actress)|Samantha Robinson', 'Maya Hawke', 'Barbara Eda-Young', 'Winona Ryder', 'Robert Loggia', 'Alice Eve', 'Evan Rachel Wood', 'Mike Moh', 'Jack Palladino', 'Rafał Zawierucha', 'Skye P. Marshall', 'Sully Boyar', 'Susan Peretz', 'Jack Lemmon', 'Jude Ciccolella', 'Al Pacino', 'Brendan Fletcher', 'Beulah Garrick', 'Paul Campbell (Canadian actor)|Paul Campbell', 'Philip Seymour Hoffman', 'Jonathan Katz', 'Renee Olstead', 'Harley Quinn Smith', 'William Hill', 'Dylan Baker', 'Nathan George', 'Al Israel', 'William Russ', 'Billy Porter (actor)|Billy Porter', 'Jon Voight', 'William H. Macy', 'Mike Moore (U.S. politician)|Mike Moore', 'Randy Jurgensen', 'Donnie Wahlberg', 'Michael P. Moran', 'Ben Cook (actor)|Ben Cook', 'Rachel Roberts (model)|Rachel Roberts', 'Charlie Cox', 'Jim Johnson', 'Sandra Kazan', 'Neal McDonough', 'James Ransone', 'Skylar Gasper', 'Damian Lewis', 'Cornelia Sharpe', 'Rip Torn', 'Lionel Mark Smith', 'Brian Dennehy', 'Timothy Olyphant', 'Joel Heyman', 'Christopher Plummer', 'Edwin Malave|Edwin "Chu Chu" Malave', 'Jay Acovone', 'Talia Shire', 'Edward Grover', 'Bill Burr', 'Michael Mastro (actor)|Michael Mastro', 'Julia Butters', 'Pepe Serna', 'Michelle Pfeiffer', 'Glen Powell', 'Gregor Fisher', 'Alicia Witt', 'Vicky Huang', 'John Travolta', 'Joseph Siravo', 'Martin Scorsese', 'J. J. Johnston', 'John Ortiz|John Augstin Ortiz', 'Jonathan Pryce', 'Judith Malina', 'Mackenzie Crook', 'Carol Kane', 'Jules Werner', 'Lucy Punch', 'Austin Butler', 'Joseph Fiennes', 'Darren Goldstein', 'Leelee Sobieski', 'William Forsythe (actor)|William Forsythe', 'Katie Holmes', 'Biff McGuire', 'Margaret Qualley', 'Lionel Pina', 'Christopher Walken', 'Scoot McNairy', 'John Leguizamo', 'Murphy Guyer', 'Kevin Spacey', 'Amy Levitt', 'Jorge Porcel', 'Victoria Tennant II', 'Steven Bauer', 'Rumer Willis', 'Gina Gershon', 'Trilby Glover', 'Allan Rich', 'Stephen Moyer', 'Lena Dunham', 'Kathy Baker', 'Gary Springer', 'Madisen Beaty', 'Woodie King Jr.', 'Penelope Ann Miller', 'Rob Dyrdek', 'Michael Bradshaw', 'Jason Gibson', 'Amy Brenneman', 'Larry Mitchell', 'Peter Jacobson', 'Greta Gerwig', 'John Marriott (actor)|John Marriott', 'Carla Gugino', 'Ray Liotta', 'Costa Ronin', 'Lynn Stalmaster', 'Steve Inwood', 'Malin Åkerman', 'Danny Glover', 'Danielle Harris', 'Bruce McGill', 'Sean Penn', 'John Sessions', 'Oleg Taktarov', 'Josh Duhamel', 'Steve Coulter', 'Josh Mowrey', 'Dakota Fanning', 'Leo Burmester', 'Alec Baldwin', 'Joseph Bova', 'Woody Allen', 'Greg Grunberg', 'Powers Boothe', 'Glenn Close', 'Pruitt Taylor Vince', 'Holly Hunter', 'Heather Goldenhersh', 'Allan Miller', 'Jeff Bridges', 'Richard Cox (actor)|Richard Cox', 'Juliette Binoche', 'Ron Cook', 'Bernard Barrow', 'James Rebhorn', 'Larry Atlas', 'Catherine Keener', 'Kris Marshall', 'Marcia Jean Kurtz', 'Clint Eastwood', 'F. Murray Abraham', 'Harmony Korine', 'Karen Allen', 'Nicholas Hammond', 'John Randolph (actor)|John Randolph', 'Jason Schwartzman', 'Mary Elizabeth Mastrantonio', 'Dennis Holahan', 'Frank John Hughes', 'Addison Timlin', 'Ingrid Rogers', 'Ara Gelici', 'Christopher Redman', 'Marisa Varela', 'Dan Hedaya', 'Byung-hun Lee', 'Frank Minucci'}
+    assert requetes.collaborateurs_proches(G, "Kevin Bacon", 1)=={'Wallace Shawn', 'Candice Bergen', 'Kevin Bacon', 'Burt Reynolds', 'Jay O. Sanders', 'Mary Kay Place', 'Charles Durning', 'Jill Clayburgh', 'Daniel Stern (actor)|Daniel Stern', 'Ben Pesner', 'Austin Pendleton', 'Frances Sternhagen'}
+
+def test_est_proche():
+    assert requetes.est_proche(G,'Jason Patric', 'Lara Parker',  1)==False
+    assert requetes.est_proche(G,'Jason Patric', 'Lara Parker',  2)==True
+    assert requetes.est_proche(G,'Jason Patric', 'Kevin Bacon',  4)==False
+
+def test_distance_naive():
+    assert requetes.distance_naive(G, 'Jason Patric', 'Lara Parker')==2
+    assert requetes.distance_naive(G, "Richard Bauman", "Anne Francis")==1
+    assert requetes.distance_naive(G, "Al Pacino", "Jack Kehoe")==1
+    assert requetes.distance_naive(G, "Al Pacino", "Katie Holmes")==1
+
+def test_distance():
+    assert requetes.distance(G, "Al Pacino", "Katie Holmes")==1
+
+def test_centralite():
+    assert requetes.centralite(G, "Kevin Bacon")==3
+    assert requetes.centralite(G, "Al Pacino")==2
+    assert requetes.centralite(G, "Alicia Witt")==3
+    assert requetes.centralite(G, "Karen Allen")==3
+    assert requetes.centralite(G, "Tracy Morgan")==3
+    assert requetes.centralite(G, "Paul Newman")==3
+    assert requetes.centralite(G, "Holmes")=="Holmes est un illustre inconnu"
+
+def test_centre_hollywood():
+    assert requetes.centre_hollywood(G)==3
+
