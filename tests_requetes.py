@@ -1,6 +1,6 @@
 import requetes
 
-G = json_vers_nx("data_100.py")
+G = requetes.json_vers_nx("data_100.py")
 def test_collaroteurs_communs():
     assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Jack Lemmon")==[]
     assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Holmes")=="inconnu"
