@@ -58,6 +58,7 @@ def json_vers_nx(chemin):
         nx.draw(G, pos, **options)
         plt.show()
         print(type(G))
+        return G
     except FileNotFoundError: # si le fichier n'a pas pu s'ouvrir
         print("impossible d'ouvrir le fichier")
 
@@ -75,7 +76,7 @@ def collaborateurs_communs(G,u,v):
         list: une liste de l'ensemble des noeuds (acteurs) adjacents à la fois à u et v
     """
     collab2Acteurs = []
-    if u not in list(G.nodes):
+    if u not in list(G.nodes) or v not in list(G.nodes):
         return "inconnu"
     for arete1 in G.adj[u]:
         for arete2 in G.adj[v]:
@@ -154,7 +155,7 @@ def distance_naive(G,u,v):
         print(u,"est un illustre inconnu")
         return None
     sont_proches = est_proche(G,u,v,distance)
-    while not sont_proches and iteration<10000:
+    while not sont_proches:
         distance += 1
         sont_proches = est_proche(G,u,v,distance)
     return distance
