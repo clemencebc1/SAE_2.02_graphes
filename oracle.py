@@ -17,7 +17,7 @@ acteur1.pack()
 
 acteur2 = Entry(fenetre, width=20)
 acteur2.pack()
-
+# acteur1.get() pour obtenir l'input
 
 
 
