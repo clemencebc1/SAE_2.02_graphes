@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import random
 
 #Q1 6.1 
+
+G = nx.Graph()
 def json_vers_nx(chemin):
     """ convertit un fichier json en un graph networkx
 
@@ -13,16 +15,13 @@ def json_vers_nx(chemin):
     Returns:
         Graph: retourne un graphe avec l'ensemble des acteurs ayant collaboré avec Kevin Bacon ou les acteurs proches
     """
-    graphe = nx.Graph()
     try : 
         fic = open(chemin)
-        print('ok')
         lignes = fic.read().split("\n") # on découpe chacune des lignes et on les place dans une liste
-        print('ok')
-        graphe.add_node("Kevin Bacon") # ajout du noeud principal
+        G.add_node("Kevin Bacon") # ajout du noeud principal
         j = 0 # un compteur pour s'assurer que la boucle while s'arrête
-        while j<len(list(graphe.nodes)) and j<1000:
-            acteurPrec = list(graphe.nodes)[j]
+        while j<len(list(G.nodes)) and j<1000:
+            acteurPrec = list(G.nodes)[j]
             acteurPrecL = "[["+acteurPrec+"]]"
             acteurPrec = acteurPrec.replace('[[', '') # on efface la double liste dans la chaine de caracteres
             acteurPrec = acteurPrec.replace(']]', '')
@@ -33,8 +32,7 @@ def json_vers_nx(chemin):
                             acteur = acteur.replace('[[', '')
                             acteur = acteur.replace(']]', '')
                             if (acteur != acteurPrec): # si ce n'est pas lui même (pas de boucle)
-                                graphe.add_edge(acteur, acteurPrec)
-                            
+                                G.add_edge(acteur, acteurPrec)
             j+=1
         options = {
         'with_labels': True,
@@ -43,15 +41,26 @@ def json_vers_nx(chemin):
         'node_shape': "s", 
         'alpha': 0.5, 
         'linewidths': 10
-        } # des options pour rendre le graphe plus lisible
+        } 
+        pos = {}
+        longueur = len(list(G.nodes))/2
+        print(longueur)
+        x = 0
+        y = 0
+        for noeud in list(G.nodes):
+            pos[noeud]=[x,y]
+            if y>longueur:
+                y = 0
+                x += 15
+            y += 15
+        # des options pour rendre le graphe plus lisible
         plt.clf() # on efface les figures précédentes 
-        nx.draw(graphe, pos = nx.random_layout(graphe), **options)
+        nx.draw(G, pos, **options)
         plt.show()
-        return graphe
+        print(type(G))
+        return G
     except FileNotFoundError: # si le fichier n'a pas pu s'ouvrir
         print("impossible d'ouvrir le fichier")
-
-G = json_vers_nx("data2.txt")
 
 
 # Q2 6.2
@@ -67,47 +76,40 @@ def collaborateurs_communs(G,u,v):
         list: une liste de l'ensemble des noeuds (acteurs) adjacents à la fois à u et v
     """
     collab2Acteurs = []
+    if u not in list(G.nodes) or v not in list(G.nodes):
+        return "inconnu"
     for arete1 in G.adj[u]:
         for arete2 in G.adj[v]:
             if (arete1 == arete2):
                 collab2Acteurs.append(arete1)
     return collab2Acteurs
         
-    
-print(collaborateurs_communs('Kevin Bacon', 'Dev Anand', G))
+
 
 #Q3 6.3
 def collaborateurs_proches(G,u,k):
-    """ recherche l'ensemble des acteurs qui ont collaboré à une distance k de l'acteur u
-
-    Args:
-        G (Graph): un graphe 
-        u (String): un acteur
-        k (int): une distance à parcourir
-
-    Returns:
-        list: une liste de l'ensemble des noeuds (acteurs) se trouvant à une distance au plus k de l’acteur
+    """Fonction renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
+    
+    Parametres:
+        G: le graphe
+        u: le sommet de départ
+        k: la distance depuis u
     """
-    pile = [u] # l'ensemble des noeuds à parcourir
-    atteint = [u] # ceux deja parcouru
-    indiceP = 0
-    cptK = 0
-    while (len(pile)>0) and cptK<k:
-        if indiceP == 0: # si l'indice du parcours à 0, on met le nombre de noeud pour une distance k dans une variable
-            nbNoeudK = len(pile)
-        noeud_courant = pile.pop()
-        indiceP += 1
-        for noeud in G[noeud_courant]:
-            if noeud not in atteint: # si l'acteur n'est pas deja proche
-                pile.append(noeud)
-                atteint.append(noeud)
-        if indiceP>nbNoeudK: # si indice superieur au nb de noeud pour k distance, cela veut dire que l'ensemble des noeuds est deja parcouru
-            cptK += 1 # on augmente le compteur de distance k, pour passer à la distance suivante
-            indiceP = 0
-    return atteint
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(u)
+    for i in range(k):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    return collaborateurs
 
-print(collaborateurs_proches(G, 'Dev Anand', 2))
-print(G.adj['Dev Anand'])
+
 
 
 def est_proche(G,u,v,k=1):
@@ -124,6 +126,9 @@ def est_proche(G,u,v,k=1):
     """
     distance = 0
     est_avant = False
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
     while distance<=k:
         if distance != k and v in collaborateurs_proches(G,u,distance):
             est_avant = True
@@ -132,9 +137,6 @@ def est_proche(G,u,v,k=1):
         distance += 1
     return False
 
-print(est_proche(G, 'Dev Anand', 'Neeru Bajwa',  1))
-print(est_proche(G, 'Dev Anand', 'Neeru Bajwa',  4))
-print(est_proche(G, 'Dev Anand', 'Alok Nath', 1))
 
 def distance_naive(G,u,v):
     """ determine la distance entre deux acteurs
@@ -148,17 +150,40 @@ def distance_naive(G,u,v):
         int: la distance separant deux acteurs
     """
     distance = 1
+    iteration = 0
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
     sont_proches = est_proche(G,u,v,distance)
     while not sont_proches:
         distance += 1
         sont_proches = est_proche(G,u,v,distance)
     return distance
 
-print(distance_naive(G, 'Dev Anand', 'Neeru Bajwa'))
-print(distance_naive(G, 'Dev Anand', 'Alok Nath'))
 
 
 def distance(G,u,v):
+    """Fonction renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
+   
+    Parametres:
+        G: le graphe
+        u: un acteur
+        v: un second acteur
+    """
+    if u not in G.nodes or u not in G.nodes:
+        print("est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(u)
+    for i in range(1,len(G.nodes)):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+        if v in collaborateurs_directs :
+            return i
     return None
 
 # Q4 6.4
@@ -172,11 +197,41 @@ def centralite(G,u):
     Returns:
         int: la plus grande distance separant l'acteur u d'un autre acteur
     """
-    return None
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    max = 0
+    for acteur in G.nodes:
+        if acteur != u:
+            distanceActeur = distance(G,u,acteur)
+            if distanceActeur != None and distanceActeur>max:
+                max = distanceActeur
+    return distanceActeur
 
 #Q5 6.5
 def centre_hollywood(G):
-    """ determine la plus grande distance entre deux acteurs dans le graphe
+    """ determine l'acteur le plus central (avec la plus petite distance avec les autres acteurs)
+
+    Args:
+        G (Graph): un graphe 
+
+    Returns:
+        String: l'acteur le plus central
+    """
+    min = 7 #6 degré de séparation max
+    acteurCentral = ""
+    for acteur in G.nodes:
+        res = centralite(G,acteur)
+        if (res<min):
+            min = res
+            acteurCentral = acteur
+    return acteurCentral
+
+
+
+
+def eloignement_max(G:nx.Graph):
+    """ determine la plus petite distance entre deux acteurs dans le graphe
 
     Args:
         G (Graph): un graphe 
@@ -184,5 +239,38 @@ def centre_hollywood(G):
     Returns:
         int: la plus grande distance separant deux acteurs dans le graphe
     """
-    return None
+    max = 0
+    for acteur in G.nodes:
+        distanceA = centralite(G,acteur)
+        if distanceA>max:
+            max = distanceA
+    return max
 
+#Bonus
+
+def collaborateurs_proches_graphe(G,u,k):
+    """Fonction renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
+    
+    Parametres:
+        G: le graphe
+        u: le sommet de départ
+        k: la distance depuis u
+    """
+    graphe = nx.Graph()
+    graphe.add_node(u)
+    if u not in G.nodes:
+        print(u,"est un illustre inconnu")
+        return None
+    collaborateurs = set()
+    collaborateurs.add(u)
+    for i in range(k):
+        collaborateurs_directs = set()
+        for c in collaborateurs:
+            for voisin in G.adj[c]:
+                if voisin not in collaborateurs:
+                    graphe.add_edge(c,voisin)
+                    collaborateurs_directs.add(voisin)
+        collaborateurs = collaborateurs.union(collaborateurs_directs)
+    plt.clf()
+    plt.show()
+    return graphe
