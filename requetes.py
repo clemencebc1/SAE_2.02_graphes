@@ -170,20 +170,19 @@ def distance(G,u,v):
         u: un acteur
         v: un second acteur
     """
-    if u not in G.nodes or u not in G.nodes:
+    if u not in G.nodes:
         print("est un illustre inconnu")
         return None
-    collaborateurs = set()
-    collaborateurs.add(u)
-    for i in range(1,len(G.nodes)):
-        collaborateurs_directs = set()
-        for c in collaborateurs:
-            for voisin in G.adj[c]:
-                if voisin not in collaborateurs:
-                    collaborateurs_directs.add(voisin)
-        collaborateurs = collaborateurs.union(collaborateurs_directs)
-        if v in collaborateurs_directs :
-            return i
+    pile = [u]
+    atteint = {u:0}
+    while (len(pile)>0):
+        noeud_courant = pile.pop()
+        for noeud in G[noeud_courant]:
+            if noeud not in atteint:
+                pile.append(noeud)
+                atteint[noeud]=atteint[noeud_courant]+1
+    if v in atteint:
+        return atteint[v]
     return None
 
 # Q4 6.4
