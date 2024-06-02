@@ -2,6 +2,7 @@ import networkx as nx
 import json
 import matplotlib.pyplot as plt
 import random
+import jupyter
 
 #Q1 6.1 
 
@@ -61,6 +62,7 @@ def json_vers_nx(chemin):
         return G
     except FileNotFoundError: # si le fichier n'a pas pu s'ouvrir
         print("impossible d'ouvrir le fichier")
+        return None
 
 
 # Q2 6.2
@@ -170,7 +172,7 @@ def distance(G,u,v):
         u: un acteur
         v: un second acteur
     """
-    if u not in G.nodes:
+    if u not in G.nodes or v not in G.nodes:
         print("est un illustre inconnu")
         return None
     pile = [u]
@@ -183,6 +185,7 @@ def distance(G,u,v):
                 atteint[noeud]=atteint[noeud_courant]+1
     if v in atteint:
         return atteint[v]
+                
     return None
 
 # Q4 6.4
@@ -220,10 +223,10 @@ def centre_hollywood(G):
     min = 7 #6 degré de séparation max
     acteurCentral = ""
     for acteur in G.nodes:
-        res = centralite(G,acteur)
-        if (res<min):
-            min = res
-            acteurCentral = acteur
+            res = centralite(G,acteur)
+            if (res<min):
+                min = res
+                acteurCentral = acteur
     return acteurCentral
 
 
