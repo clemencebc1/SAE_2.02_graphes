@@ -31,6 +31,21 @@ def demandeDistance():
             print("les caractères entrés ne sont pas des chiffres")
             return None
     return int(distance)
+        
+def chgmntActeurU(acteurU):
+    """change l'acteur principal 
+
+    Args:
+        acteurU (str): une chaine de caracteres reprensentant l'acteur principal 
+
+    Returns:
+        retourne soit le nom du nouvel acteur ou None si aucun changement
+    """
+    chgmntActeurU = input("Voulez-vous changer d'acteur principal ? "+acteurU+" est actuellement l'acteur principal (Oui/Non)\n")
+    if chgmntActeurU.lower() == "oui":
+        acteur = input("Entrez le nom complet de l'acteur\n")
+        return acteur
+    return None
 
 def choix_programme(json_vers_nx, acteurU):
     """effectue les calculs en fonction de l'entrée de l'utilisateur
@@ -79,7 +94,6 @@ def choix_programme(json_vers_nx, acteurU):
                 return requetes.eloignement_max(json_vers_nx)
             case _:
                 return "Votre proposition n'est pas dans les choix"
-
 
 # programme principal permettant de lancer l'application
 def programme_principal():
