@@ -1,8 +1,7 @@
 import networkx as nx
 import json
 import matplotlib.pyplot as plt
-import random
-import jupyter
+import math
 
 #Q1 6.1 
 
@@ -172,18 +171,18 @@ def distance(G,u,v):
         u: un acteur
         v: un second acteur
     """
-    if u not in G.nodes or v not in G.nodes:
+    if u not in G.nodes or v not in G.nodes: 
         print("est un illustre inconnu")
         return None
     pile = [u]
     atteint = {u:0}
     while (len(pile)>0):
         noeud_courant = pile.pop()
-        for noeud in G[noeud_courant]:
-            if noeud not in atteint:
+        for noeud in G[noeud_courant]: # pour chaque voisin de u
+            if noeud not in atteint: # si il n'est pas déjà dans le dictionnaire, alors nous devons le traiter
                 pile.append(noeud)
                 atteint[noeud]=atteint[noeud_courant]+1
-            elif atteint[noeud]>atteint[noeud_courant]+1:
+            elif atteint[noeud]>atteint[noeud_courant]+1: # si il est déjà dans le dictionnaire mais que toutefois un autre chemin plus court est trouvé
                 atteint[noeud]=atteint[noeud_courant]+1
     if v in atteint:
         return atteint[v]
@@ -212,9 +211,8 @@ def centralite(G,u):
                 max = distanceActeur
     return distanceActeur
 
-#Q5 6.5
 def dicoDistance(G,u):
-    """fonction non demandée mais utile, retourne un dictionnaire de distance à partir d'un acteur
+    """fonction non demandée mais utile, retourne un dictionnaire de distance à partir d'un acteur, se base sur la fonction distance
 
     Args:
         G (Graph): un graphe
@@ -237,7 +235,7 @@ def dicoDistance(G,u):
                     atteint[noeud]=atteint[noeud_courant]+1
                 elif atteint[noeud]>atteint[noeud_courant]+1:
                     atteint[noeud]=atteint[noeud_courant]+1
-    return atteint
+    return atteint 
 
 def centre_hollywood(G):
     """ determine l'acteur le plus central (avec la plus petite distance avec les autres acteurs)
@@ -248,12 +246,12 @@ def centre_hollywood(G):
     Returns:
         String: l'acteur le plus central
     """
-    min = 15 #6 degré de séparation max
+    min = float(math.inf) #6 degré de séparation max
     acteurCentral = ""
     listeDistance=[]
     for u in G.nodes:
         listeDistance.append(dicoDistance(G,u))
-    for dico in listeDistance:
+    for dico in listeDistance: #on parcourt tous les dictionnaires et on vérifie la plus petite distance dans les valeurs
         for cle in dico:
             if dico[cle]<min:
                 min = dico[cle]
@@ -261,7 +259,7 @@ def centre_hollywood(G):
     return acteurCentral
 
 
-
+#Q5 6.5
 
 def eloignement_max(G:nx.Graph):
     """ determine la plus grande distance entre deux acteurs dans le graphe
