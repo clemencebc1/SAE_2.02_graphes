@@ -23,14 +23,19 @@ def chemin():
     return None
 
 def demandeDistance():
-    distance=input("Entrez une distance (un nombre)\n")
-    tour=0
-    while int(distance)==ValueError and tour<4:
-        distance=input("ce n'est pas un nombre, veuillez entrer un chiffre ou un nombre (sans espace), "+"il vous reste"+ str(4-tour)+"tentatives \n")
-        if tour==4:
-            print("les caractères entrés ne sont pas des chiffres")
-            return None
-    return int(distance)
+    try:
+        distance=input("Entrez une distance (un nombre)\n")
+        return int(distance)
+    except:
+        tour=0
+        dis=demandeDistance()
+        while tour<4 and type(dis)!=int:
+            if tour==4:
+                print("les caractères entrés ne sont pas des chiffres")
+                return None
+            tour+=1
+            dis=demandeDistance()
+        return int(dis)
         
 def chgmntActeurU(acteurU):
     """change l'acteur principal 
@@ -61,9 +66,11 @@ def choix_programme(json_vers_nx, acteurU):
                 acteurV=input("Donnez le nom complet d'un acteur différent de "+acteurU+" afin de déterminer leurs collaborateurs communs\n")
                 collabCommun = requetes.collaborateurs_communs(json_vers_nx, acteurU, acteurV)
                 if collabCommun==None:
-                    return "un des deux acteurs n'est pas connu"
+                    print("un des acteurs n'est pas connu")
+                    return None
+                res = ""
                 for acteur in collabCommun:
-                    res = acteur + ", "
+                    res += acteur + ", "
                 return res
             case "2":
                 distance = demandeDistance()
@@ -72,37 +79,66 @@ def choix_programme(json_vers_nx, acteurU):
 
                 collabProche = requetes.collaborateurs_proches(json_vers_nx, acteurU, distance)
                 res = ""
+                print(type(collabProche))
                 if collabProche != None:
                     for acteur in collabProche:
                         res += acteur + ","
-                    return res
-                return None
+                print(res)
+                return True
             case "3":
                 acteurV=input("entrez un acteur différent de "+acteurU+" afin de savoir si celui-ci est à une distance k de l'acteur saisi\n")
                 distance = demandeDistance()
                 if distance == None:
                     return None
-                return requetes.est_proche(json_vers_nx,acteurU,acteurV,int(distance))
+                res = requetes.est_proche(json_vers_nx,acteurU,acteurV,int(distance))
+                if res:
+                    print(acteurU + " est bien à une distance "+str(distance)+" de "+acteurV+"\n")
+                else:
+                    print(acteurU + " n'est pas à une distance "+str(distance)+" de "+acteurV+"\n")
+                    
+                return True
             case "4":
                 acteurV=input("entrez un acteur différent de "+acteurU+" pour calculer leur distance\n")
-                return requetes.distance(json_vers_nx,acteurU,acteurV)
+                res = requetes.distance(json_vers_nx,acteurU,acteurV)
+                if res!=None:
+                    print("La distance entre "+ acteurU + " et " + acteurV+ " est de "+ str(res))
+                else:
+                    return None
+                return True
             case "5":
-                return requetes.centralite(json_vers_nx,acteurU)
+                res = requetes.centralite(json_vers_nx,acteurU)
+                if res == None:
+                    print(acteurU+ " est incconu")
+                    return None
+                print("Le plus grand éloignement de "+acteurU+ " avec un autre acteur est "+str(res))
+                return True
             case "6":
-                return requetes.centre_hollywood(json_vers_nx)
+                print("L'acteur de plus central d'hollywood, c'est-à-dire le moins éloigné, est "+ requetes.centre_hollywood(json_vers_nx))
+                return True
             case "7":
-                return requetes.eloignement_max(json_vers_nx)
+                print("La distance de l'acteur le moins central, c'est-à-dire le plus éloigné, est "+str(requetes.eloignement_max(json_vers_nx)))
+                return True
             case _:
-                return "Votre proposition n'est pas dans les choix"
+                print("Votre proposition n'est pas dans les choix")
+                
+                return None
+
+def explication():
+    explication= input("Dans le cadre de notre SAé 2.02, nous vous proposons de réaliser divers calculs autour du jeu des six degrés de Bacon ! Voulez-vous plus d'explication ?(Oui/Non) \n");
+    if explication.lower() == "oui":
+        print("Très bien, le jeu a pour but est de relier un acteur quelconque à Kevin Bacon par six partenaires de cinéma au maximum. \n Le degré de séparation d'un acteur est caractérisé par un Bacon number, Kevin Bacon "+
+                        "a un Bacon de number de lui-même de 0.  \n Le Bacon number d'un acteur A ayant tourné directement avec Kevin Bacon est 1. \n "+
+                        "Puis l'acteur B direct à l'acteur A a un Bacon number de 2 etc. \n Nous vous proposons donc de réaliser divers calculs de distance, d'acteurs communs etc.\n")
+    return 1
+
 
 # programme principal permettant de lancer l'application
 def programme_principal():
     """le programme principal lançant l'application
     """
     try:
-        explication= input("Dans le cadre de notre SAé 2.02, nous vous proposons")
-        if explication:
-            print()
+        explication()
+        
     
         json_vers_nx=chemin()
         if json_vers_nx == None:
@@ -113,9 +149,9 @@ def programme_principal():
         while continuer and tour<100:
             choix_programme(json_vers_nx,acteurU)
             tour += 1
-            continuerCalculs = input("Voulez-vous continuer le calculs ? Oui/Non")
-            if continuerCalculs.lower() == "non":
-                continuer = False
+            continuerCalculs = input("Voulez-vous continuer le calculs ? Oui/Non\n")
+            if continuerCalculs.lower() == "non" or continuerCalculs.lower() != "oui":
+                return "À bientôt !"
             chgmntActeur = chgmntActeurU(acteurU)
             if chgmntActeur != None:
                 acteurU = chgmntActeur
@@ -123,7 +159,7 @@ def programme_principal():
         if  tour == 100:
             return "Vous avez effectué beaucoup de calculs ! Redémarrez le programme pour en refaire de nouveau."
         return "À bientôt !"
-    except:
+    except ValueError:
         return "une erreur est survenue, veuillez relancer le programme"
 
 

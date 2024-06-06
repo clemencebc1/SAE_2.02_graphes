@@ -2,9 +2,10 @@ import requetes
 
 G = requetes.json_vers_nx("data_100.txt")
 def test_collaroteurs_communs():
-    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Jack Lemmon")==[]
-    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Holmes")=="inconnu"
-    assert requetes.collaborateurs_communs(G, "Al Pacino", "Larry Gates")==['James Broderick']
+    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Jack Lemmon")==set()
+    assert requetes.collaborateurs_communs(G, "Kevin Bacon", "Holmes")==None
+    assert requetes.collaborateurs_communs(G, "Al Pacino", "Larry Gates")=={'James Broderick'}
+    assert requetes.collaborateurs_communs(G,"Vicki Wauchope","Mark Derwin")=={'Charles Durning'}
 
 def test_collaborateurs_proches():
     print(requetes.collaborateurs_proches(G, "Jason Patric", 2))
