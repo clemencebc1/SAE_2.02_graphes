@@ -1,4 +1,5 @@
 import requetes
+import networkx as nx
 
 G = requetes.json_vers_nx("data_100.txt")
 def test_collaroteurs_communs():

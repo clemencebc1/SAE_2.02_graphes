@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as m
 import random
 import jupyter
+from pyvis.network import Network
 
 #Q1 6.1 
 
@@ -46,7 +47,6 @@ def json_vers_nx(chemin):
         } 
         pos = {}
         longueur = len(list(G.nodes))/2
-        print(longueur)
         x = 0
         y = 0
         for noeud in list(G.nodes):
@@ -59,8 +59,8 @@ def json_vers_nx(chemin):
         plt.clf() # on efface les figures précédentes 
         nx.draw(G, pos, **options)
         plt.show()
-        print(type(G))
         return G
+    
     except FileNotFoundError: # si le fichier n'a pas pu s'ouvrir
         print("impossible d'ouvrir le fichier")
         return None
@@ -82,7 +82,6 @@ def collaborateurs_communs(G,u,v):
         return None
     return set(G.adj[u]).intersection(set(G.adj[v]))
         
-
 
 #Q3 6.3
 def collaborateurs_proches(G,u,k):
@@ -235,6 +234,8 @@ def dicoDistance(G,u):
                     atteint[noeud]=atteint[noeud_courant]+1
     return atteint
 
+# Pour ces fonctions, il est possible d'utiliser la fonction networkx closeness_centrality(G)
+
 def centre_hollywood(G):
     """ determine l'acteur le plus central (avec la plus petite distance avec les autres acteurs)
 
@@ -255,7 +256,6 @@ def centre_hollywood(G):
                 min = dico[cle]
                 acteurCentral = cle
     return acteurCentral
-
 
 
 
